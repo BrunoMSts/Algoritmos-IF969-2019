@@ -4,7 +4,7 @@ class No:
         self.left = None
         self.right = None
 
-    def __lt__(self, otherNo):
+    '''def __lt__(self, otherNo):
         if self.value < otherNo.value:
             return True
         return False
@@ -32,7 +32,7 @@ class No:
     def __ne__(self, otherNo):
         if self.value != otherNo.value:
             return True
-        return False
+        return False'''
 
     def __str__(self):
         return str(self.value)
@@ -82,15 +82,39 @@ class Tree:
         if tree.right:
             self.preOrdem(tree.right)
 
-    def reiniciar(self, elem = None, tree = None): 
+    def reiniciar(self, elem = None, tree = None, pai = No()): 
         if tree is None:
             tree = self.root
-        else:
-            pass
+        if tree.left and elem != tree.value:
+            pai = tree
+            self.reiniciar(elem, tree.left, pai)
+        if tree.right and elem != tree.value:
+            pai = tree
+            self.reiniciar(elem, tree.right, pai)
+        if elem == tree.value:
+            if (tree.left and tree.right) is None and elem > pai.value:
+                pai.right = None
+            elif (tree.left and tree.right) is None and elem < pai.value:
+                pai.left = None
+            else:
+                filho = tree.left
+                aux = tree
+                while filho.right:
+                    aux1 = filho
+                    filho = filho.right
+                if elem == self.root.value:
+                    self.root.value = filho.value
+                    aux1.right = None
+                elif elem != self.root.value:
+                    pai.left = filho
+                    filho.right = aux.right
+                    if aux.left and filho.value != aux.left.value:
+                        filho.left = aux.left
+                        aux.left.right = None
 
     def posOrdem(self, tree = None):
         pass
-
+        
     def __bool__(self):
         if self.height == 0:
             return False
