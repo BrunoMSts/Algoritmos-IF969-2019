@@ -82,15 +82,15 @@ class Tree:
         if tree.right:
             self.preOrdem(tree.right)
 
-    def reiniciar(self, elem = None, tree = None, pai = No()): 
+    def remover(self, elem = None, tree = None, pai = No()): 
         if tree is None:
             tree = self.root
         if tree.left and elem != tree.value:
             pai = tree
-            self.reiniciar(elem, tree.left, pai)
+            self.remover(elem, tree.left, pai)
         if tree.right and elem != tree.value:
             pai = tree
-            self.reiniciar(elem, tree.right, pai)
+            self.remover(elem, tree.right, pai)
         if elem == tree.value:
             if (tree.left and tree.right) is None and elem > pai.value:
                 pai.right = None
@@ -112,8 +112,20 @@ class Tree:
                         filho.left = aux.left
                         aux.left.right = None
 
-    def posOrdem(self, tree = None):
-        pass
+    def reiniciar(self, tree = None):
+        if self.root is None:
+            raise ValueError("Não há elementos na Árvore")
+        else:
+            if not tree:
+                tree = self.root
+            if tree.left:
+                self.reiniciar(tree.left)
+            if tree.right:
+                self.reiniciar(tree.right)
+            tree.left = None
+            tree.right = None
+            if (self.root.left and self.root.right) is None:
+                self.root = None
         
     def __bool__(self):
         if self.height == 0:
@@ -146,6 +158,3 @@ class Tree:
     
     def __dict__(self):
         pass
-if __name__ == "__main__":
-    t = Tree(5)
-    print(t.root)
