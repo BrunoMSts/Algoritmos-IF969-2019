@@ -48,6 +48,7 @@ class Tree:
         else:
             self.root = None
         self.height = 0
+        self.iter = []
 
     def insert(self, elem = None, tree = None):
         if tree is None:
@@ -122,11 +123,13 @@ class Tree:
                 self.reiniciar(tree.left)
             if tree.right:
                 self.reiniciar(tree.right)
+            self.iter.append(str(tree.value))
             tree.left = None
             tree.right = None
             if (self.root.left and self.root.right) is None:
                 self.root = None
-        
+                return self.iter
+
     def __bool__(self):
         if self.height == 0:
             return False
