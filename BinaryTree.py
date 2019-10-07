@@ -47,10 +47,12 @@ class Tree:
             self.root = node
         else:
             self.root = None
-        self.height = 0
+        self.iter = []
 
     def insert(self, elem = None, tree = None):
-        if tree is None:
+        if self.root is None:
+            self.root = No(elem)
+        elif tree is None:
             tree = self.root
             self.insert(elem, tree)
         else:
@@ -82,15 +84,15 @@ class Tree:
         if tree.right:
             self.preOrdem(tree.right)
 
-    def reiniciar(self, elem = None, tree = None, pai = No()): 
+    def remover(self, elem = None, tree = None, pai = No()): 
         if tree is None:
             tree = self.root
         if tree.left and elem != tree.value:
             pai = tree
-            self.reiniciar(elem, tree.left, pai)
+            self.remover(elem, tree.left, pai)
         if tree.right and elem != tree.value:
             pai = tree
-            self.reiniciar(elem, tree.right, pai)
+            self.remover(elem, tree.right, pai)
         if elem == tree.value:
             if (tree.left and tree.right) is None and elem > pai.value:
                 pai.right = None
@@ -112,9 +114,34 @@ class Tree:
                         filho.left = aux.left
                         aux.left.right = None
 
-    def posOrdem(self, tree = None):
-        pass
-        
+    def reiniciar(self, tree = None):
+        if self.root is None:
+            raise ValueError("Não há elementos na Árvore")
+        else:
+            if not tree:
+                tree = self.root
+            if tree.left:
+                self.reiniciar(tree.left)
+            if tree.right:
+                self.reiniciar(tree.right)
+            self.iter.append(str(tree.value))
+            tree.left = None
+            tree.right = None
+            if (self.root.left and self.root.right) is None:
+                self.root = None
+                return self.iter
+
+    def height(self, tree = None):
+        if tree == None:
+            return -1
+        else:
+            subL = self.height(tree.left)
+            subR = self.height(tree.right)
+            if subL > subR:
+                return 1 + subL
+            else:
+                return 1 + subR
+
     def __bool__(self):
         if self.height == 0:
             return False
@@ -146,6 +173,3 @@ class Tree:
     
     def __dict__(self):
         pass
-if __name__ == "__main__":
-    t = Tree(5)
-    print(t.root)
